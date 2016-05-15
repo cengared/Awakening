@@ -46,7 +46,14 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\AutomaticDoor.cs" />
-     <Compile Include="Assets\CameraControl.cs" />
+     <Compile Include="Assets\DroneAI.cs" />
+     <Compile Include="Assets\DroneAwakeState.cs" />
+     <Compile Include="Assets\DroneChaseState.cs" />
+     <Compile Include="Assets\DroneMoveState.cs" />
+     <Compile Include="Assets\DroneSleepState.cs" />
+     <Compile Include="Assets\DroneTrigger.cs" />
+     <Compile Include="Assets\EndTrigger.cs" />
+     <Compile Include="Assets\GreenTrigger.cs" />
      <Compile Include="Assets\LeapC\Arm.cs" />
      <Compile Include="Assets\LeapC\Bone.cs" />
      <Compile Include="Assets\LeapC\CSharpExtensions.cs" />
@@ -83,6 +90,7 @@
      <Compile Include="Assets\LeapC\TrackedQuad.cs" />
      <Compile Include="Assets\LeapC\Vector.cs" />
      <Compile Include="Assets\LeapCharacterControl.cs" />
+     <Compile Include="Assets\LeapMenu.cs" />
      <Compile Include="Assets\LeapMotion\Scripts\HandFactory.cs" />
      <Compile Include="Assets\LeapMotion\Scripts\HandPool.cs" />
      <Compile Include="Assets\LeapMotion\Scripts\HandProxy.cs" />
@@ -138,6 +146,9 @@
      <Compile Include="Assets\LeapMotion\Scripts\VR\LeapVRCameraControl.cs" />
      <Compile Include="Assets\LeapMotion\Scripts\VR\LeapVRTemporalWarping.cs" />
      <Compile Include="Assets\LeapMotion\Scripts\VR\TemporalWarpingStatus.cs" />
+     <Compile Include="Assets\RedTrigger.cs" />
+     <Compile Include="Assets\State.cs" />
+     <Compile Include="Assets\StateMachine.cs" />
      <None Include="Assets\Plugins\donotdelete.txt" />
      <None Include="Assets\LeapMotion\Resources\LeapCG.cginc" />
      <None Include="Assets\LeapMotion\README_BEFORE_UPDATING.txt" />

@@ -8,7 +8,6 @@ public class LeapCharacterControl : MonoBehaviour {
 
 	Controller leapController;
 	GameObject player, cam;
-	bool handOpenThisFrame, handOpenLastFrame;
 	CharacterController characterController;
 
 	// Use this for initialization
@@ -16,29 +15,27 @@ public class LeapCharacterControl : MonoBehaviour {
 		leapController = new Controller ();
 		player = GameObject.FindGameObjectWithTag("Player");
 		cam = GameObject.Find ("Camera");
-		handOpenThisFrame = false;
-		handOpenLastFrame = false;
 		characterController = GetComponent<CharacterController> ();
+		Cursor.visible = false;
 	}
 
+	// returns the hand that is furthest from the player (closest to the screen)
 	Hand SelectHand() {
-		Frame f = leapController.Frame ();
-		Hand nearestHand = null;
-		float zMax = -float.MaxValue;
-		for (int i = 0; i < f.Hands.Count; i++) {
-			float palmZ = f.Hands [i].PalmPosition.ToUnityScaled ().z;
-			if (palmZ > zMax) {
+		Frame frame = leapController.Frame ();
+		Hand furthestHand = null;
+		float zMax = float.MaxValue;
+		for (int i = 0; i < frame.Hands.Count; i++) {
+			float palmZ = frame.Hands [i].PalmPosition.ToUnityScaled ().z;
+			//Debug.Log ("PalmZ: " + palmZ);
+			if (palmZ < zMax) {
 				zMax = palmZ;
-				nearestHand = f.Hands [i];
+				furthestHand = frame.Hands [i];
 			}
 		}
-		return nearestHand;
+		return furthestHand;
 	}
 
-	bool IsHandOpen(Hand h) {
-		return h.Fingers.Count > 1;
-	}
-
+	// handles functionality for looking around the scene
 	void Look(Hand h) {
 		float rotationThreshold = 120.0f;
 		float handX = h.PalmPosition.ToUnityScaled ().x;
@@ -46,7 +43,7 @@ public class LeapCharacterControl : MonoBehaviour {
 
 		// rotate the player left or right
 		if (Mathf.Abs (handX) > rotationThreshold) {
-			player.transform.RotateAround (Vector3.up, (handX/200) * Time.deltaTime);
+			player.transform.Rotate (Vector3.up, (handX/4) * Time.deltaTime);
 		}
 
 		// rotate view down
@@ -60,29 +57,31 @@ public class LeapCharacterControl : MonoBehaviour {
 		}
 	}
 
+	// movement functionality using a dead zone 
 	void Move(Hand h) {
 		Vector3 forward = transform.TransformDirection (Vector3.forward);
-		// moves the player forwards if hand movement is more than the dead zone threshold
-		if (h.PalmPosition.ToUnityScaled ().z < -25.0f) {
-			characterController.SimpleMove (forward * 5f);
+		// moves the player forwards if the hand moves out of dead zone
+		if (h.PalmPosition.ToUnityScaled ().z < 0f) {
+			characterController.SimpleMove (forward * 6f);
 		}
 
-		// moves the player backwards if hand movement is more than the dead zone threshold
-		if (h.PalmPosition.ToUnityScaled ().z > 200) {
-			characterController.SimpleMove (-forward * 2.5f);
+		// moves the player backwards if the hand moves out of dead zone
+		if (h.PalmPosition.ToUnityScaled ().z > 200f) {
+			characterController.SimpleMove (-forward * 3f);
 		}
-
 	}
 
 	void Update () {
-		Hand hand = SelectHand ();
+		// get the hand that is nearest to the screen
+		Hand hand = SelectHand (); 
 
 		if (hand != null) {
-			handOpenThisFrame = IsHandOpen (hand);
-			Look (hand);
-			Move (hand);
+			Look (hand); 
+			Move (hand); 
 		}
-		handOpenLastFrame = handOpenThisFrame;
-	}
 
+		// quit the demo with escape key
+		if (Input.GetKey (KeyCode.Escape))
+			Application.Quit ();
+	}
 }

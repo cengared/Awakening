@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// Handles the opening of doors via triggers
 public class AutomaticDoor : MonoBehaviour {
 
 	private Vector3 closedPosition;
@@ -14,16 +15,19 @@ public class AutomaticDoor : MonoBehaviour {
 		open = false;
 	}
 
-	void OnTriggerEnter(Collider collider) {
-		if (collider.gameObject.tag == "Player")
+	// starts door movement coroutine on trigger entry
+	void OnTriggerEnter(Collider other) {
+		if (other.gameObject.tag == "Player")
 			StartCoroutine (Move ());
 	}
 
-	void OnTriggerExit(Collider collider) {
-		if (collider.gameObject.tag == "Player")
+	// same as trigger entry, but for trigger exit
+	void OnTriggerExit(Collider other) {
+		if (other.gameObject.tag == "Player")
 			StartCoroutine (Move ());
 	}
 
+	// the coroutine for moving a door
 	public IEnumerator Move() {
 		Vector3 targetPosition = new Vector3();
 
@@ -45,6 +49,4 @@ public class AutomaticDoor : MonoBehaviour {
 			yield return null;
 		}
 	}
-
-
 }
